@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/content/metadata";
 import { locations, site } from "@/content/site";
+import { BOOKING_ATTR } from "@/content/booking";
 import { PageHero } from "@/components/sections/page-hero";
 import { Icon } from "@/components/ui/icon";
 import { Accent, Container, revealDelay } from "@/components/ui/primitives";
@@ -13,10 +14,11 @@ const CHANNELS = [
     value: "Pick a time that suits you",
     href: site.calendlyUrl,
     primary: true,
+    booking: true,
   },
-  { label: "Email", value: site.email, href: `mailto:${site.email}`, primary: false },
-  { label: "Phone", value: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}`, primary: false },
-  { label: "Careers", value: site.careersEmail, href: `mailto:${site.careersEmail}`, primary: false },
+  { label: "Email", value: site.email, href: `mailto:${site.email}`, primary: false, booking: false },
+  { label: "Phone", value: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}`, primary: false, booking: false },
+  { label: "Careers", value: site.careersEmail, href: `mailto:${site.careersEmail}`, primary: false, booking: false },
 ] as const;
 
 export default function ContactPage() {
@@ -39,6 +41,7 @@ export default function ContactPage() {
                 <a
                   href={c.href}
                   {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  {...(c.booking ? { [BOOKING_ATTR]: "", "aria-haspopup": "dialog" as const } : {})}
                   className={`group flex h-full items-end justify-between gap-6 rounded-3xl p-8 transition-colors ${
                     c.primary
                       ? "bg-lime text-ink-950 hover:bg-white"
@@ -52,7 +55,7 @@ export default function ContactPage() {
                     </span>
                   </span>
                   <Icon
-                    name={c.href.startsWith("http") ? "arrowUpRight" : "arrow"}
+                    name={c.href.startsWith("http") && !c.booking ? "arrowUpRight" : "arrow"}
                     size={28}
                     className="shrink-0 transition-transform group-hover:translate-x-1"
                   />

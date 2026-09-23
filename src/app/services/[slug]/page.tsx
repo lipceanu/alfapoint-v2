@@ -32,7 +32,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
     <>
       <PageHero eyebrow={service.title} title={service.headline} lead={service.intro}>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={site.calendlyUrl}>Book a call</ButtonLink>
+          <ButtonLink href={site.calendlyUrl} booking>
+            Book a call
+          </ButtonLink>
           <ButtonLink href="/contact" variant="ghost">
             Get in touch
           </ButtonLink>

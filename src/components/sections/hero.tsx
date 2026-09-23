@@ -36,7 +36,9 @@ export function Hero() {
               platforms and add vetted engineers to their teams, at a cost that makes sense.
             </p>
             <div className="mt-10 flex animate-rise flex-wrap gap-3" style={{ animationDelay: "240ms" }}>
-              <ButtonLink href={site.calendlyUrl}>Book a call</ButtonLink>
+              <ButtonLink href={site.calendlyUrl} booking>
+                Book a call
+              </ButtonLink>
               <ButtonLink href="/services" variant="ghost">
                 Explore services
               </ButtonLink>

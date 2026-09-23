@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { RevealObserver } from "@/components/ui/reveal-observer";
+import { BookingDialog } from "@/components/booking/booking-dialog";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <RevealObserver />
+        <BookingDialog />
         <Analytics />
       </body>
     </html>

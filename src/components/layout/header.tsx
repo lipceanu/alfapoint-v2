@@ -23,10 +23,13 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    // Lock both html and body: iOS Safari ignores overflow on body alone
+    document.documentElement.style.overflow = open ? "hidden" : "";
     document.body.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenOnPath(null);
     window.addEventListener("keydown", onKey);
     return () => {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };

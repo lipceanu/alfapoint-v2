@@ -34,7 +34,9 @@ export function CtaBand({
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white">{body}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row md:flex-col md:items-end">
-              <ButtonLink href={site.calendlyUrl}>Book a call</ButtonLink>
+              <ButtonLink href={site.calendlyUrl} booking>
+                Book a call
+              </ButtonLink>
               <ButtonLink href={`mailto:${site.email}`} variant="ghost" className="border-white/40">
                 {site.email}
               </ButtonLink>

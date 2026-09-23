@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { Icon } from "./icon";
+import { BOOKING_ATTR } from "@/content/booking";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto w-full max-w-[1240px] px-5 sm:px-8 ${className}`}>{children}</div>;
@@ -19,16 +20,18 @@ type ButtonLinkProps = {
   children: ReactNode;
   variant?: ButtonVariant;
   className?: string;
+  /** Open the Calendly booking pop-up instead of navigating */
+  booking?: boolean;
 };
 
-export function ButtonLink({ href, children, variant = "lime", className = "" }: ButtonLinkProps) {
+export function ButtonLink({ href, children, variant = "lime", className = "", booking = false }: ButtonLinkProps) {
   const external = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
   const classes = `group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-sm font-semibold tracking-wide transition-colors duration-300 ${BUTTON_STYLES[variant]} ${className}`;
   const content = (
     <>
       {children}
       <Icon
-        name={href.startsWith("http") ? "arrowUpRight" : "arrow"}
+        name={href.startsWith("http") && !booking ? "arrowUpRight" : "arrow"}
         size={18}
         className="transition-transform duration-300 group-hover:translate-x-1"
       />
@@ -41,6 +44,7 @@ export function ButtonLink({ href, children, variant = "lime", className = "" }:
         href={href}
         className={classes}
         {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...(booking ? { [BOOKING_ATTR]: "", "aria-haspopup": "dialog" as const } : {})}
       >
         {content}
       </a>
