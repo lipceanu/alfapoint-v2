@@ -16,10 +16,28 @@ The previous site lives in a separate repository (`CreamyOmlette/alfapoint-v2`) 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm test           # content and routing tests
+npm test           # content and routing tests (Vitest)
+npm run e2e        # cross-browser and device tests (Playwright)
 npm run lint
 npm run build
 ```
+
+### Cross-browser and device coverage
+
+`npm run e2e` builds the site and checks every page in 7 profiles:
+
+- Desktop Chrome, Firefox and Safari (WebKit), at 1440×900
+- iPhone 15, in portrait and landscape
+- Pixel 7 (Android)
+- iPad
+
+It checks HTTP status, console errors, fonts, broken images, horizontal overflow, scroll reveals, the mobile menu, keyboard skip link, FAQ accordions, legacy redirects, tap-target size, and no-JS / failed-JS fallbacks.
+It also runs a width sweep from 320px to 2560px (17 widths) in all three engines.
+Full-page screenshots are saved to `test-results/screens/`.
+The first time, install the browsers with `npx playwright install chromium firefox webkit`.
+
+Browser support follows Tailwind CSS v4: Safari 16.4+, Chrome/Edge 111+ and Firefox 128+.
+Edge uses the same engine as Chrome, and Samsung Internet and Opera are also Chromium-based.
 
 ## Where things live
 

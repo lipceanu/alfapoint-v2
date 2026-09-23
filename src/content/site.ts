@@ -50,13 +50,13 @@ export const leadership: readonly Leader[] = [
   {
     name: "Dumitru Lipceanu",
     role: "Chief Executive Officer",
-    photo: "/team/dima.png",
+    photo: "/team/dima.jpg",
     linkedin: "https://www.linkedin.com/in/dumitru-lipceanu-9706b693/",
   },
   {
     name: "Vladislav Matvei",
     role: "Chief Technology Officer",
-    photo: "/team/vlad.png",
+    photo: "/team/vlad.jpg",
     linkedin: "https://www.linkedin.com/in/vlad-matvei-2b782997/",
   },
   {

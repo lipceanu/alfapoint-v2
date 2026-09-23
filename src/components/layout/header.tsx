@@ -41,8 +41,8 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-18 max-w-[1240px] items-center justify-between px-5 sm:px-8">
-        <Link href="/" aria-label={`${site.name} home`} className="block h-7 w-[122px] text-paper">
-          <span className="logo-mask block h-full w-full" />
+        <Link href="/" aria-label={`${site.name} home`} className="flex h-11 w-[122px] items-center text-paper">
+          <span className="logo-mask block h-7 w-full" />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
@@ -50,7 +50,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`rounded-full px-4 py-2 text-sm transition-colors hover:text-lime ${
+              className={`flex h-11 items-center rounded-full px-4 text-sm transition-colors hover:text-lime ${
                 isActive(item.href) ? "text-lime" : "text-paper/80"
               }`}
             >
@@ -62,7 +62,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/contact"
-            className="hidden rounded-full bg-lime px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-white sm:inline-flex"
+            className="hidden h-11 items-center rounded-full bg-lime px-5 text-sm font-semibold text-ink-950 transition-colors hover:bg-white sm:inline-flex"
           >
             Let&apos;s talk
           </Link>

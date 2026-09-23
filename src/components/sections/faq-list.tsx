@@ -7,7 +7,7 @@ export function FaqList({ faqs, tone = "light" }: { faqs: readonly Faq[]; tone?:
   return (
     <div className={`border-t ${border}`}>
       {faqs.map((faq) => (
-        <details key={faq.question} className={`group border-b ${border} py-6`} data-reveal>
+        <details key={faq.question} className={`group border-b ${border} py-6`}>
           <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-medium sm:text-xl [&::-webkit-details-marker]:hidden">
             {faq.question}
             <span className="mt-1 shrink-0 transition-transform duration-300 group-open:rotate-45">
