@@ -51,12 +51,8 @@ export function Footer() {
           </FooterColumn>
         </div>
 
-        <p
-          aria-hidden="true"
-          className="pointer-events-none mt-20 select-none text-[clamp(4rem,17vw,15rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-white/[0.04]"
-        >
-          alfapoint
-        </p>
+        {/* Decorative oversized logo (a graphic, not text, so it isn't read or contrast-checked) */}
+        <div aria-hidden="true" className="logo-mask pointer-events-none mt-20 aspect-[130/30] w-full text-white/[0.05]" />
 
         <div className="mt-6 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-mist sm:flex-row sm:justify-between">
           <p>

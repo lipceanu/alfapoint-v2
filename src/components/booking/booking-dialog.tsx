@@ -5,9 +5,9 @@ import { BOOKING_ATTR, calendlyEmbedUrl, isCalendlyReadyMessage, shouldOpenBooki
 import { Icon } from "@/components/ui/icon";
 
 /** How long to wait for Calendly before offering the "open in new tab" fallback. */
-const SLOW_LOAD_MS = 10_000;
+const SLOW_LOAD_MS = 15_000;
 /** If Calendly never posts a ready message, reveal the frame this long after it loads. */
-const READY_FALLBACK_MS = 2500;
+const READY_FALLBACK_MS = 6000;
 
 /**
  * Site-wide Calendly pop-up. Any link with `data-booking` opens it; without JS
@@ -67,11 +67,11 @@ export function BookingDialog() {
       aria-label="Book a call"
       onClose={() => setLink(null)}
       onClick={(e) => e.target === e.currentTarget && close()}
-      className="m-auto h-dvh max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 backdrop:bg-ink-950/80 backdrop:backdrop-blur-sm sm:h-[min(760px,90dvh)] sm:w-[min(1000px,92vw)] sm:rounded-3xl"
+      className="m-auto h-dvh max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 backdrop:bg-ink-950/80 backdrop:backdrop-blur-sm windowed:h-[min(760px,90dvh)] windowed:w-[min(1000px,92vw)] windowed:rounded-3xl"
     >
       {link && (
-        <div className="relative flex h-full flex-col bg-white text-ink-900 sm:rounded-3xl">
-          <div className="flex items-center justify-between gap-4 border-b border-ink-900/10 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+        <div className="relative flex h-full flex-col bg-white text-ink-900 windowed:rounded-3xl">
+          <div className="flex items-center justify-between gap-4 border-b border-ink-900/10 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] [@media(max-height:500px)]:py-1 pr-[max(1.25rem,env(safe-area-inset-right))] pl-[max(1.25rem,env(safe-area-inset-left))]">
             <p className="font-semibold">Book a 30-minute call</p>
             <div className="flex items-center gap-2">
               <a

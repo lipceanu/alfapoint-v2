@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Booking pop-up is a centred window only when the screen is both wide and tall
+   enough; phones (portrait or landscape) get it full-screen. */
+@custom-variant windowed (@media (min-width: 640px) and (min-height: 560px));
+
 @theme {
   --color-ink-950: #05070d;
   --color-ink-900: #0a0e1a;

@@ -6,7 +6,11 @@ const WIDTHS = [320, 360, 375, 390, 414, 480, 600, 768, 820, 900, 1024, 1180, 12
 const SWEEP_PAGES = ["/", "/services", "/services/dedicated-teams", "/about", "/careers", "/careers/php-backend-engineer", "/contact"];
 
 test.describe("width sweep", () => {
-  test.skip(({ isMobile }) => isMobile, "sweep runs on desktop engines only");
+  // Once per engine: desktop Chrome, Firefox and Safari (skip phones/tablets and the Edge laptop duplicate)
+  test.skip(
+    ({ isMobile, browserName, viewport }) => isMobile || (browserName === "chromium" && viewport?.width !== 1440),
+    "sweep runs once per engine (Chromium, Firefox, WebKit)",
+  );
 
   for (const width of WIDTHS) {
     test(`no overflow or clipped headings at ${width}px`, async ({ page }) => {

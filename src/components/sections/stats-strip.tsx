@@ -41,8 +41,16 @@ function TechMarquee() {
     >
       <ul className="flex w-max animate-marquee gap-14 hover:[animation-play-state:paused]">
         {items.map((tech, i) => (
-          <li key={`${tech.name}-${i}`} className="flex items-center gap-3 opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0" aria-hidden={i >= techMarquee.length}>
-            <Image src={tech.logo} alt="" width={28} height={28} loading="eager" unoptimized className="h-7 w-7 object-contain" />
+          <li key={`${tech.name}-${i}`} className="group flex items-center gap-3" aria-hidden={i >= techMarquee.length}>
+            <Image
+              src={tech.logo}
+              alt=""
+              width={28}
+              height={28}
+              loading="eager"
+              unoptimized
+              className="h-7 w-7 object-contain opacity-60 grayscale transition group-hover:opacity-100 group-hover:grayscale-0"
+            />
             <span className="font-mono text-sm text-mist">{tech.name}</span>
           </li>
         ))}

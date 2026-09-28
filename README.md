@@ -24,15 +24,23 @@ npm run build
 
 ### Cross-browser and device coverage
 
-`npm run e2e` builds the site and checks every page in 7 profiles:
+`npm run e2e` builds the site and checks every page on **18 device profiles**:
 
-- Desktop Chrome, Firefox and Safari (WebKit), at 1440×900
-- iPhone 15, in portrait and landscape
-- Pixel 7 (Android)
-- iPad
+- **Desktop:** Chrome, Firefox and Safari at 1440×900; Edge on a 1280×720 laptop
+- **iPhone:** SE (320px), 15, 15 Pro Max, plus 15 and 15 Pro Max in landscape
+- **Android:** Galaxy S9+, Galaxy S24, Galaxy A55, Pixel 7, plus Pixel 7 in landscape
+- **Tablets:** iPad, iPad in landscape, iPad Mini, Galaxy Tab S9
 
-It checks HTTP status, console errors, fonts, broken images, horizontal overflow, scroll reveals, the mobile menu, keyboard skip link, FAQ accordions, legacy redirects, tap-target size, and no-JS / failed-JS fallbacks.
-It also runs a width sweep from 320px to 2560px (17 widths) in all three engines.
+Checks include:
+- HTTP status, console errors, fonts, broken images, horizontal overflow and scroll reveals
+- The mobile menu, keyboard skip link, FAQ accordions and the Calendly booking pop-up
+- Legacy redirects and every internal link and anchor
+- Tap-target size, a large-text (130%) layout, and a minimum text size
+- A WCAG 2.1 AA accessibility audit (axe)
+- No-JS and failed-JS fallbacks
+
+It also runs a width sweep from 320px to 2560px (17 widths) in Chromium, Firefox and WebKit.
+All of this uses browser engines with device emulation, not physical phones.
 Full-page screenshots are saved to `test-results/screens/`.
 The first time, install the browsers with `npx playwright install chromium firefox webkit`.
 

@@ -70,7 +70,7 @@ export default function CareersPage() {
           </ul>
           <p className="mt-12 text-slate">
             Don&apos;t see your role? Send your CV to{" "}
-            <a href={`mailto:${site.careersEmail}`} className="font-semibold text-brand-600 underline-offset-4 hover:underline">
+            <a href={`mailto:${site.careersEmail}`} className="font-semibold text-brand-600 underline underline-offset-4">
               {site.careersEmail}
             </a>
             .

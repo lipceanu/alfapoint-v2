@@ -49,7 +49,7 @@ for (const { path, name } of BOOKING_PAGES) {
     // Full-screen on phones, centred window on larger screens
     const box = await dialog.boundingBox();
     const vp = page.viewportSize()!;
-    if (vp.width < 640) {
+    if (vp.width < 640 || vp.height < 560) {
       expect(Math.round(box!.width)).toBe(vp.width);
       expect(box!.height).toBeGreaterThanOrEqual(vp.height - 1);
     } else {
@@ -72,7 +72,8 @@ for (const { path, name } of BOOKING_PAGES) {
 }
 
 test("clicking the backdrop closes the pop-up", async ({ page }) => {
-  test.skip((page.viewportSize()?.width ?? 0) < 640, "pop-up is full-screen on phones (no backdrop)");
+  const vp = page.viewportSize()!;
+  test.skip(vp.width < 640 || vp.height < 560, "pop-up is full-screen on phones (no backdrop)");
   await stubCalendly(page);
   await page.goto("/");
   await waitForAppReady(page);

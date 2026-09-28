@@ -17,11 +17,21 @@ export function calendlyEmbedUrl(schedulingUrl: string, host: string): string {
   return url.toString();
 }
 
-/** True for the postMessage events Calendly's embed sends once its page is showing. */
+/**
+ * Calendly events that mean the scheduling page is actually on screen.
+ * (`calendly.page_height` and others can arrive before anything is drawn.)
+ */
+const CALENDLY_READY_EVENTS = new Set([
+  "calendly.event_type_viewed",
+  "calendly.date_and_time_selected",
+  "calendly.profile_page_viewed",
+]);
+
+/** True when a postMessage from Calendly's embed says its page is showing. */
 export function isCalendlyReadyMessage(origin: string, data: unknown): boolean {
   if (origin !== "https://calendly.com") return false;
   const event = (data as { event?: unknown } | null)?.event;
-  return typeof event === "string" && event.startsWith("calendly.");
+  return typeof event === "string" && CALENDLY_READY_EVENTS.has(event);
 }
 
 type ClickLike = {

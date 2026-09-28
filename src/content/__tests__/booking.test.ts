@@ -44,6 +44,8 @@ describe("isCalendlyReadyMessage", () => {
     expect(isCalendlyReadyMessage("https://calendly.com", { event: "calendly.event_type_viewed" })).toBe(true);
     expect(isCalendlyReadyMessage("https://evil.example", { event: "calendly.event_type_viewed" })).toBe(false);
     expect(isCalendlyReadyMessage("https://calendly.com", { event: "other" })).toBe(false);
+    // Sent before the calendar is drawn, so it must not count as ready
+    expect(isCalendlyReadyMessage("https://calendly.com", { event: "calendly.page_height" })).toBe(false);
     expect(isCalendlyReadyMessage("https://calendly.com", "calendly.x")).toBe(false);
     expect(isCalendlyReadyMessage("https://calendly.com", null)).toBe(false);
   });

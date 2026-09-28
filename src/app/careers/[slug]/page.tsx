@@ -56,7 +56,7 @@ export default async function JobPage({ params }: PageProps<"/careers/[slug]">) 
             <p className="max-w-3xl text-xl leading-relaxed">{job.closing}</p>
             <p className="mt-6 text-mist">
               Send your CV to{" "}
-              <a href={applyHref} className="text-lime underline-offset-4 hover:underline">
+              <a href={applyHref} className="text-lime underline underline-offset-4">
                 {site.careersEmail}
               </a>{" "}
               or reach out through any channel that suits you.
