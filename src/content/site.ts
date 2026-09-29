@@ -75,3 +75,22 @@ export const mainNav: readonly NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Careers", href: "/careers" },
 ];
+
+export type ClientLogo = {
+  name: string;
+  logo: string;
+  /** Intrinsic size of the SVG (its viewBox) */
+  width: number;
+  height: number;
+  /** Rendered height, tuned so wide and tall marks carry similar visual weight */
+  sizeClass: string;
+};
+
+/** Organisations Alfapoint has worked with (carried over from the previous site). */
+export const clients: readonly ClientLogo[] = [
+  { name: "European Parliament", logo: "/clients/eu.svg", width: 236, height: 50, sizeClass: "h-5 sm:h-7" },
+  { name: "Shell", logo: "/clients/shell.svg", width: 71, height: 80, sizeClass: "h-7 sm:h-10" },
+  { name: "BP", logo: "/clients/bp.svg", width: 60, height: 80, sizeClass: "h-7 sm:h-10" },
+  { name: "ABB", logo: "/clients/abb.svg", width: 131, height: 50, sizeClass: "h-5 sm:h-7" },
+  { name: "KSB", logo: "/clients/ksb.svg", width: 114, height: 50, sizeClass: "h-5 sm:h-7" },
+];

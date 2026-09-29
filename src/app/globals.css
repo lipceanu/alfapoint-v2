@@ -2,6 +2,9 @@
 
 /* Booking pop-up is a centred window only when the screen is both wide and tall
    enough; phones (portrait or landscape) get it full-screen. */
+/* Very short viewports (phones in landscape): hero drops secondary content */
+@custom-variant short (@media (max-height: 500px));
+
 @custom-variant windowed (@media (min-width: 640px) and (min-height: 560px));
 
 @theme {

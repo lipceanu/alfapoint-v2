@@ -79,3 +79,28 @@ test("reveal failsafe shows content when the app fails to start", async ({ page 
     .poll(() => lastSection.evaluate((el) => getComputedStyle(el).opacity), { timeout: 6000 })
     .toBe("1");
 });
+
+test("client logos are fully visible on the first screen, without scrolling", async ({ page }) => {
+  await page.goto("/");
+  const logos = page.getByRole("list", { name: "Clients we have worked with" });
+  await expect(logos.getByRole("img")).toHaveCount(5);
+  for (const name of ["European Parliament", "Shell", "BP", "ABB", "KSB"]) {
+    await expect(logos.getByRole("img", { name })).toBeVisible();
+  }
+  await page.waitForTimeout(1300); // entrance animation
+  const { bottom, right, vh, vw } = await logos.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return { bottom: r.bottom, right: r.right, vh: window.innerHeight, vw: window.innerWidth };
+  });
+  expect(bottom, "logos end above the fold").toBeLessThanOrEqual(vh);
+  expect(right, "logos fit the screen width").toBeLessThanOrEqual(vw);
+  // All logos load and sit on one line
+  const tops = await logos.getByRole("img").evaluateAll((imgs) =>
+    imgs.map((i) => {
+      const r = i.getBoundingClientRect();
+      return { mid: r.top + r.height / 2, ok: (i as HTMLImageElement).naturalWidth > 0 };
+    }),
+  );
+  expect(tops.every((t) => t.ok)).toBe(true);
+  expect(Math.max(...tops.map((t) => t.mid)) - Math.min(...tops.map((t) => t.mid))).toBeLessThan(4);
+});
