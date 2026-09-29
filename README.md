@@ -42,6 +42,7 @@ Checks include:
 It also runs a width sweep from 320px to 2560px (17 widths) in Chromium, Firefox and WebKit.
 All of this uses browser engines with device emulation, not physical phones.
 Full-page screenshots are saved to `test-results/screens/`.
+To test a deployed site, such as a Vercel preview, instead of a local build, set `E2E_BASE_URL=https://… npm run e2e`.
 The first time, install the browsers with `npx playwright install chromium firefox webkit`.
 
 Browser support follows Tailwind CSS v4: Safari 16.4+, Chrome/Edge 111+ and Firefox 128+.
