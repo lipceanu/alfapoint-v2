@@ -109,3 +109,26 @@ test("without JavaScript, Book a call is still a working link", async ({ browser
   await expect(link).toHaveAttribute("target", "_blank");
   await context.close();
 });
+
+test("closing and immediately reopening the pop-up always works", async ({ page }) => {
+  await stubCalendly(page);
+  await page.goto("/");
+  await waitForAppReady(page);
+  const dialog = page.getByRole("dialog", { name: "Book a call" });
+  for (let i = 0; i < 5; i++) {
+    // Close and re-click in the same tick, before the async "close" event is delivered
+    await page.evaluate(() => {
+      const link = document.querySelector("main a[data-booking]") as HTMLElement;
+      link.click();
+    });
+    await expect(dialog).toBeVisible();
+    await page.evaluate(() => {
+      document.querySelector("dialog")!.close();
+      (document.querySelector("main a[data-booking]") as HTMLElement).click();
+    });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator("iframe")).toBeAttached();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+  }
+});

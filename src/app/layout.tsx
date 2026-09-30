@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0e1a",
+  themeColor: "#1a2136",
 };
 
 // Marks the document as JS-enabled before first paint so scroll-reveal

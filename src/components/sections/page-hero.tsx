@@ -21,7 +21,7 @@ export function PageHero({ eyebrow, title, lead, children }: PageHeroProps) {
           <Eyebrow>{eyebrow}</Eyebrow>
         </div>
         <h1
-          className="mt-6 max-w-4xl animate-rise text-[clamp(2.5rem,6vw,4.75rem)] leading-[1] font-semibold tracking-[-0.03em] text-balance"
+          className="mt-6 max-w-4xl animate-rise text-[clamp(2.125rem,6vw,4.75rem)] leading-[1] font-semibold tracking-[-0.03em] text-balance hyphens-auto sm:hyphens-manual"
           style={{ animationDelay: "80ms" }}
         >
           {title}
