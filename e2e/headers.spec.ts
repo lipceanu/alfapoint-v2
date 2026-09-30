@@ -32,9 +32,12 @@ test.describe("response headers", () => {
     for (const path of ["/", "/about"]) {
       expect((await request.get(path)).headers()["cache-control"] ?? "", path).not.toContain("max-age=3600");
     }
+    // A missing image: Vercel applies path-based header rules to 404s too (it can't
+    // match on status), so allow the asset rule there, but never anything longer
     const missing = await request.get("/clients/does-not-exist.svg");
     expect(missing.status()).toBe(404);
-    expect(missing.headers()["cache-control"] ?? "").not.toContain("max-age=3600");
+    const cc = missing.headers()["cache-control"] ?? "";
+    expect(cc === "" || /max-age=0\b/.test(cc) || cc === "public, max-age=3600, stale-while-revalidate=86400", cc).toBe(true);
   });
 
   test("the booking pop-up still embeds Calendly with these headers", async ({ page }) => {
