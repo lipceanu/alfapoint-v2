@@ -13,9 +13,12 @@ const serif = Instrument_Serif({
   variable: "--font-instrument",
   subsets: ["latin"],
   weight: "400",
-  style: ["normal", "italic"],
+  // Only the italic is used (the <Accent> in headlines)
+  style: "italic",
 });
-const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
+// Mono is only used for small labels, never the headline: don't let it compete
+// with the headline's fonts for early bandwidth
+const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], preload: false });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
