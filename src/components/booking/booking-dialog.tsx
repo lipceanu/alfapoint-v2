@@ -42,7 +42,12 @@ export function BookingDialog() {
       setBooking({ href: anchor.href, id: nextId.current });
     };
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    // Lets tests (and anything else) know clicks now open the pop-up rather than a new tab
+    document.documentElement.setAttribute("data-booking-ready", "");
+    return () => {
+      document.removeEventListener("click", onClick);
+      document.documentElement.removeAttribute("data-booking-ready");
+    };
   }, []);
 
   // Per opening: show the modal, lock scrolling, start the slow timer, listen for Calendly
