@@ -67,14 +67,14 @@ function ChannelCard({ channel: c, delay }: { channel: Channel; delay: number })
         href={c.href}
         {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...(c.booking ? { [BOOKING_ATTR]: "", "aria-haspopup": "dialog" as const } : {})}
-        className={`group flex h-full items-end justify-between gap-6 rounded-3xl p-8 transition-colors ${
+        className={`group flex h-full items-end justify-between gap-3 rounded-3xl p-6 transition-colors sm:gap-6 sm:p-8 ${
           c.primary ? "bg-lime text-ink-950 hover:bg-white" : "border border-white/10 hover:border-lime/50"
         }`}
       >
         <span>
           <span className={`eyebrow block ${c.primary ? "text-ink-950/70" : "text-mist"}`}>{c.label}</span>
-          <span className="mt-8 block text-2xl font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-3xl">
-            {c.value}
+          <span className="mt-8 block text-xl font-semibold tracking-tight [overflow-wrap:anywhere] min-[360px]:text-2xl sm:text-3xl">
+            {breakAfterAt(c.value)}
           </span>
         </span>
         <Icon
@@ -97,14 +97,32 @@ function PhoneCard({ delay }: { delay: number }) {
           <a
             key={phone}
             href={phoneHref(phone)}
-            className="group flex items-center justify-between gap-3 text-xl font-semibold tracking-tight transition-colors hover:text-lime xs:text-2xl sm:gap-6 sm:text-3xl"
+            className="group flex items-center justify-between gap-3 text-xl font-semibold tracking-tight transition-colors hover:text-lime min-[360px]:text-2xl sm:gap-6 sm:text-3xl"
           >
-            {/* Narrow phones may wrap between digit groups; wider screens keep one line */}
-            <span>{phone}</span>
+            <span>{keepLocalPartTogether(phone)}</span>
             <Icon name="arrow" size={24} className="shrink-0 transition-transform group-hover:translate-x-1 sm:size-7" />
           </a>
         ))}
       </span>
     </li>
   );
+}
+
+/** Emails may wrap only right after the "@" (not mid-word). */
+function breakAfterAt(value: string) {
+  const at = value.indexOf("@");
+  if (at === -1) return value;
+  return (
+    <>
+      {value.slice(0, at + 1)}
+      <wbr />
+      {value.slice(at + 1)}
+    </>
+  );
+}
+
+/** "+373 (69) 719 888": if it must wrap, break only after the country code. */
+function keepLocalPartTogether(phone: string) {
+  const [country, ...rest] = phone.split(" ");
+  return rest.length ? `${country} ${rest.join("\u00a0")}` : phone;
 }
