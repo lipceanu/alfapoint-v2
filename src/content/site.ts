@@ -56,7 +56,7 @@ export const leadership: readonly Leader[] = [
   {
     name: "Vladislav Matvei",
     role: "Chief Technology Officer",
-    photo: "/team/vlad.jpg",
+    photo: "/team/vladislav-matvei.jpg",
     linkedin: "https://www.linkedin.com/in/vlad-matvei-2b782997/",
   },
   {
