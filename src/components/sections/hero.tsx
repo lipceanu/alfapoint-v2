@@ -25,9 +25,9 @@ export function Hero() {
               <span className="h-2 w-2 animate-pulse-dot rounded-full bg-lime" />
               Nearshore engineering · Europe &amp; GCC
             </p>
+            {/* No entrance animation: the headline is the page's largest paint */}
             <h1
-              className="mt-5 animate-rise text-[clamp(2.25rem,min(4.2vw_+_1rem,7svh),4.75rem)] leading-[0.98] font-semibold tracking-[-0.035em] text-balance sm:mt-7 compact:mt-4 short:mt-0 short:text-[2.25rem]"
-              style={{ animationDelay: "80ms" }}
+              className="mt-5 text-[clamp(2.25rem,min(4.2vw_+_1rem,7svh),4.75rem)] leading-[0.98] font-semibold tracking-[-0.035em] text-balance sm:mt-7 compact:mt-4 short:mt-0 short:text-[2.25rem]"
             >
               Senior engineers for products that <Accent>need to ship.</Accent>
             </h1>
