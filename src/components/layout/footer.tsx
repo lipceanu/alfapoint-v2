@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/primitives";
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-ink-950 pt-20 pb-10">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-ink-950 pt-16 pb-10 sm:pt-20">
       <Container>
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
@@ -51,10 +51,7 @@ export function Footer() {
           </FooterColumn>
         </div>
 
-        {/* Decorative oversized logo (a graphic, not text, so it isn't read or contrast-checked) */}
-        <div aria-hidden="true" className="logo-mask pointer-events-none mt-20 aspect-[130/30] w-full text-white/[0.05]" />
-
-        <div className="mt-6 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-mist sm:flex-row sm:justify-between">
+        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-mist sm:flex-row sm:justify-between">
           <p>
             © {year} {site.name}. All rights reserved.
           </p>
