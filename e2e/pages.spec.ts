@@ -8,7 +8,8 @@ for (const path of PAGES) {
     page.on("console", (msg) => {
       if (msg.type() !== "error") return;
       // Vercel Analytics' script only exists when deployed on Vercel
-      if (msg.location().url.includes("/_vercel/insights/")) return;
+      // (locally it 404s; with nosniff, Firefox reports that against the page URL, so match the text too)
+      if (msg.location().url.includes("/_vercel/insights/") || msg.text().includes("/_vercel/insights/")) return;
       errors.push(`console: ${msg.text()} (${msg.location().url})`);
     });
 
