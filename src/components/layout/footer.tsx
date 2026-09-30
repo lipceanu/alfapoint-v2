@@ -51,11 +51,10 @@ export function Footer() {
           </FooterColumn>
         </div>
 
-        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-mist sm:flex-row sm:justify-between">
+        <div className="mt-16 border-t border-white/10 pt-6 text-xs text-mist">
           <p>
             © {year} {site.name}. All rights reserved.
           </p>
-          <p className="font-mono">Chișinău · Bucharest · Riyadh</p>
         </div>
       </Container>
     </footer>
