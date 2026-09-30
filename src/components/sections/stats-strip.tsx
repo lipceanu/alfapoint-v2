@@ -31,30 +31,27 @@ export function StatsStrip() {
   );
 }
 
+/** Static list (no motion): moving content that runs for more than 5 s fails WCAG 2.2.2 */
 function TechMarquee() {
-  const items = [...techMarquee, ...techMarquee];
   return (
-    <div
-      className="relative overflow-hidden border-t border-white/10 py-8 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-      aria-label="Technologies we work with"
-      role="region"
-    >
-      <ul className="flex w-max animate-marquee gap-14 hover:[animation-play-state:paused]">
-        {items.map((tech, i) => (
-          <li key={`${tech.name}-${i}`} className="group flex items-center gap-3" aria-hidden={i >= techMarquee.length}>
-            <Image
-              src={tech.logo}
-              alt=""
-              width={28}
-              height={28}
-              loading="eager"
-              unoptimized
-              className="h-7 w-7 object-contain opacity-60 grayscale transition group-hover:opacity-100 group-hover:grayscale-0"
-            />
-            <span className="font-mono text-sm text-mist">{tech.name}</span>
-          </li>
-        ))}
-      </ul>
+    <div className="border-t border-white/10 py-8" aria-label="Technologies we work with" role="region">
+      <Container>
+        <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
+          {techMarquee.map((tech) => (
+            <li key={tech.name} className="group flex items-center gap-3">
+              <Image
+                src={tech.logo}
+                alt=""
+                width={28}
+                height={28}
+                unoptimized
+                className="h-7 w-7 object-contain opacity-60 grayscale transition group-hover:opacity-100 group-hover:grayscale-0"
+              />
+              <span className="font-mono text-sm text-mist">{tech.name}</span>
+            </li>
+          ))}
+        </ul>
+      </Container>
     </div>
   );
 }
