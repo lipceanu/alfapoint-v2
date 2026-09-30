@@ -141,6 +141,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    /* Delays would still postpone content; override inline delays too */
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
   }
   .js [data-reveal] {
     opacity: 1;
