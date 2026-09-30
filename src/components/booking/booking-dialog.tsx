@@ -9,29 +9,48 @@ const SLOW_LOAD_MS = 15_000;
 /** If Calendly never posts a ready message, reveal the frame this long after it loads. */
 const READY_FALLBACK_MS = 6000;
 
+type Status = "loading" | "unconfirmed" | "slow" | "ready";
+type Booking = { href: string; id: number };
+
 /**
  * Site-wide Calendly pop-up. Any link with `data-booking` opens it; without JS
  * (or on Cmd/Ctrl-click) the link still opens Calendly in a new tab.
+ *
+ * Status: loading → ready (Calendly's own frame says its page is shown),
+ * loading → unconfirmed (frame loaded, 6 s, no message: show it with a fallback link),
+ * loading → slow (15 s without a load: fallback link only). slow/unconfirmed can still
+ * become ready; timers never downgrade ready.
  */
 export function BookingDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  // A fresh object per click, so re-opening the same link always triggers the open effect
-  const [booking, setBooking] = useState<{ href: string } | null>(null);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const nextId = useRef(0);
+  // A fresh object (and id) per click, so every opening gets its own frame and timers
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [status, setStatus] = useState<Status>("loading");
+  const [loadedId, setLoadedId] = useState<number | null>(null);
   const link = booking?.href ?? null;
-  const [status, setStatus] = useState<"loading" | "ready" | "slow">("loading");
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       const anchor = (event.target as Element | null)?.closest?.<HTMLAnchorElement>(`a[${BOOKING_ATTR}]`);
       if (!anchor || !shouldOpenBookingPopup(event)) return;
       event.preventDefault();
+      nextId.current += 1;
       setStatus("loading");
-      setBooking({ href: anchor.href });
+      setLoadedId(null);
+      setBooking({ href: anchor.href, id: nextId.current });
     };
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    // Lets tests (and anything else) know clicks now open the pop-up rather than a new tab
+    document.documentElement.setAttribute("data-booking-ready", "");
+    return () => {
+      document.removeEventListener("click", onClick);
+      document.documentElement.removeAttribute("data-booking-ready");
+    };
   }, []);
 
+  // Per opening: show the modal, lock scrolling, start the slow timer, listen for Calendly
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog || !booking) return;
@@ -41,8 +60,10 @@ export function BookingDialog() {
     root.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
     const slow = window.setTimeout(() => setStatus((s) => (s === "loading" ? "slow" : s)), SLOW_LOAD_MS);
-    // Calendly posts messages once its scheduling page has rendered
-    const onMessage = (e: MessageEvent) => isCalendlyReadyMessage(e.origin, e.data) && setStatus("ready");
+    // Only messages from this opening's own Calendly frame count
+    const onMessage = (e: MessageEvent) => {
+      if (e.source === frameRef.current?.contentWindow && isCalendlyReadyMessage(e.origin, e.data)) setStatus("ready");
+    };
     window.addEventListener("message", onMessage);
     return () => {
       window.clearTimeout(slow);
@@ -52,7 +73,15 @@ export function BookingDialog() {
     };
   }, [booking]);
 
+  // Per frame load: if Calendly never confirms, reveal the frame anyway after a while
+  useEffect(() => {
+    if (loadedId === null || loadedId !== booking?.id) return;
+    const reveal = window.setTimeout(() => setStatus((s) => (s === "ready" ? s : "unconfirmed")), READY_FALLBACK_MS);
+    return () => window.clearTimeout(reveal);
+  }, [loadedId, booking]);
+
   const close = () => dialogRef.current?.close();
+  const frameVisible = status === "ready" || status === "unconfirmed";
 
   let src: string | null = null;
   if (link) {
@@ -67,6 +96,7 @@ export function BookingDialog() {
     <dialog
       ref={dialogRef}
       aria-label="Book a call"
+      data-status={booking ? status : undefined}
       // "close" fires asynchronously; if the pop-up was already reopened by then, keep it
       onClose={() => !dialogRef.current?.open && setBooking(null)}
       onClick={(e) => e.target === e.currentTarget && close()}
@@ -77,14 +107,6 @@ export function BookingDialog() {
           <div className="flex items-center justify-between gap-4 border-b border-ink-900/10 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] [@media(max-height:500px)]:py-1 pr-[max(1.25rem,env(safe-area-inset-right))] pl-[max(1.25rem,env(safe-area-inset-left))]">
             <p className="font-semibold">Book a 30-minute call</p>
             <div className="flex items-center gap-2">
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden rounded-full px-3 py-2 text-sm text-slate hover:text-ink-900 sm:inline"
-              >
-                Open in new tab
-              </a>
               <button
                 type="button"
                 onClick={close}
@@ -98,7 +120,7 @@ export function BookingDialog() {
           </div>
 
           <div className="relative flex-1 overflow-hidden">
-            {status !== "ready" && (
+            {!frameVisible && (
               <div className="absolute inset-0 grid place-items-center px-6 text-center" role="status">
                 {status === "loading" ? (
                   <span className="flex items-center gap-3 text-slate">
@@ -106,25 +128,36 @@ export function BookingDialog() {
                     Loading available times…
                   </span>
                 ) : (
-                  <span className="text-slate">
-                    Calendly is taking longer than usual.{" "}
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-600 underline">
-                      Open it in a new tab
-                    </a>
-                  </span>
+                  <span className="text-slate">Calendly is taking longer than usual. You can use the link below.</span>
                 )}
               </div>
             )}
             {src ? (
               <iframe
+                key={booking!.id}
+                ref={frameRef}
                 title="Calendly scheduling"
                 src={src}
-                onLoad={() => window.setTimeout(() => setStatus("ready"), READY_FALLBACK_MS)}
-                className={`h-full w-full border-0 transition-opacity duration-300 ${status === "ready" ? "opacity-100" : "opacity-0"}`}
+                data-loaded={loadedId === booking!.id ? "true" : undefined}
+                onLoad={() => setLoadedId(booking!.id)}
+                className={`h-full w-full border-0 transition-opacity duration-300 ${frameVisible ? "opacity-100" : "opacity-0"}`}
                 allow="payment"
               />
             ) : null}
           </div>
+
+          {/* Always-available escape hatch, on every screen size */}
+          <p className="border-t border-ink-900/10 px-5 py-2 text-center text-sm text-slate pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+            Trouble loading?{" "}
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block py-1 font-semibold text-brand-600 underline underline-offset-2"
+            >
+              Open Calendly in a new tab
+            </a>
+          </p>
         </div>
       )}
     </dialog>

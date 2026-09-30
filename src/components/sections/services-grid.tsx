@@ -30,7 +30,7 @@ export function ServicesGrid({ showHeader = true }: { showHeader?: boolean }) {
             >
               <Link
                 href={`/services/${service.slug}`}
-                className="group relative flex h-full min-h-[280px] flex-col bg-paper p-8 transition-colors duration-500 hover:bg-ink-900 hover:text-paper"
+                className="focus-inset group relative flex h-full min-h-[280px] flex-col bg-paper p-8 transition-colors duration-500 hover:bg-ink-900 hover:text-paper"
               >
                 <div className="flex items-start justify-between">
                   <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand/10 text-brand transition-colors duration-500 group-hover:bg-lime group-hover:text-ink-950">

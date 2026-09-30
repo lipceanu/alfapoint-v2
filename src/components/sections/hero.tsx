@@ -22,7 +22,7 @@ export function Hero() {
         <div className="my-auto grid w-full items-center gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
           <div>
             <p className="eyebrow flex animate-rise items-center gap-3 text-mist short:hidden">
-              <span className="h-2 w-2 animate-pulse-dot rounded-full bg-lime" />
+              <span className="h-2 w-2 rounded-full bg-lime shadow-[0_0_0_4px_rgb(61_255_174/0.15)]" />
               Nearshore engineering · Europe &amp; GCC
             </p>
             <h1

@@ -12,9 +12,9 @@ export const PAGES = [
   "/contact",
 ];
 
-/** Waits until the client app has started (reveal script running). */
+/** Waits until the client app has started: scroll reveals and the booking pop-up are both live. */
 export async function waitForAppReady(page: Page): Promise<void> {
-  await page.locator("html[data-reveal-ready]").waitFor({ state: "attached" });
+  await page.locator("html[data-reveal-ready][data-booking-ready]").waitFor({ state: "attached" });
 }
 
 /** Scrolls through the page in viewport steps so lazy images and scroll reveals trigger. */
