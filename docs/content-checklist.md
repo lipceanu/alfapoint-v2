@@ -15,6 +15,8 @@ The items below are claims or placeholders that someone at Alfapoint must confir
 - [ ] **Careers perks** (`src/app/careers/page.tsx`).
 - [ ] **Open roles**: are the PHP and .NET vacancies still open?
 
+- [ ] **Client logos** on the first screen (European Parliament, Shell, BP, ABB, KSB) were carried over from the previous site. Confirm they are still accurate and still OK to display.
+
 ## Contact details
 - [ ] v2 used both `info@alfa-point.com` (general) and `office@alfa-point.com` (careers). Kept as-is; confirm both inboxes are monitored.
 - [ ] The phone number is a Swiss number (+41). Confirm it's still correct.

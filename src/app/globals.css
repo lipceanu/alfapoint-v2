@@ -2,16 +2,21 @@
 
 /* Booking pop-up is a centred window only when the screen is both wide and tall
    enough; phones (portrait or landscape) get it full-screen. */
+/* Short windows (small laptops, non-maximised browsers): tighter hero */
+@custom-variant compact (@media (max-height: 720px));
+/* Very short viewports (phones in landscape): hero drops secondary content */
+@custom-variant short (@media (max-height: 500px));
+
 @custom-variant windowed (@media (min-width: 640px) and (min-height: 560px));
 
 @theme {
-  --color-ink-950: #05070d;
-  --color-ink-900: #0a0e1a;
-  --color-ink-800: #111729;
-  --color-ink-700: #1b2338;
-  --color-ink-600: #2a3450;
-  --color-paper: #f4f5f1;
-  --color-paper-2: #e9ebe4;
+  --color-ink-950: #121829;
+  --color-ink-900: #1a2136;
+  --color-ink-800: #242c45;
+  --color-ink-700: #2f3853;
+  --color-ink-600: #3b4563;
+  --color-paper: #eceee8;
+  --color-paper-2: #e2e5dd;
   --color-mist: #9aa3b8;
   --color-slate: #525b70;
   --color-brand: #2c67ff;

@@ -15,7 +15,9 @@ const READY_FALLBACK_MS = 6000;
  */
 export function BookingDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [link, setLink] = useState<string | null>(null);
+  // A fresh object per click, so re-opening the same link always triggers the open effect
+  const [booking, setBooking] = useState<{ href: string } | null>(null);
+  const link = booking?.href ?? null;
   const [status, setStatus] = useState<"loading" | "ready" | "slow">("loading");
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export function BookingDialog() {
       if (!anchor || !shouldOpenBookingPopup(event)) return;
       event.preventDefault();
       setStatus("loading");
-      setLink(anchor.href);
+      setBooking({ href: anchor.href });
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
@@ -32,7 +34,7 @@ export function BookingDialog() {
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog || !link) return;
+    if (!dialog || !booking) return;
     if (!dialog.open) dialog.showModal();
     // Lock page scroll behind the modal (html + body for iOS Safari)
     const root = document.documentElement;
@@ -48,7 +50,7 @@ export function BookingDialog() {
       root.style.overflow = "";
       document.body.style.overflow = "";
     };
-  }, [link]);
+  }, [booking]);
 
   const close = () => dialogRef.current?.close();
 
@@ -65,7 +67,8 @@ export function BookingDialog() {
     <dialog
       ref={dialogRef}
       aria-label="Book a call"
-      onClose={() => setLink(null)}
+      // "close" fires asynchronously; if the pop-up was already reopened by then, keep it
+      onClose={() => !dialogRef.current?.open && setBooking(null)}
       onClick={(e) => e.target === e.currentTarget && close()}
       className="m-auto h-dvh max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 backdrop:bg-ink-950/80 backdrop:backdrop-blur-sm windowed:h-[min(760px,90dvh)] windowed:w-[min(1000px,92vw)] windowed:rounded-3xl"
     >
