@@ -13,7 +13,8 @@ export function calendlyEmbedUrl(schedulingUrl: string, host: string): string {
   }
   url.searchParams.set("embed_domain", host);
   url.searchParams.set("embed_type", "PopupWidget");
-  url.searchParams.set("hide_gdpr_banner", "1");
+  // Calendly's cookie banner stays on: hiding it does not stop its cookies, and
+  // this site has no consent manager of its own.
   return url.toString();
 }
 
