@@ -8,9 +8,14 @@ export const site = {
     "Alfapoint is a nearshore software engineering company with teams in Moldova, Romania and Saudi Arabia. We build AI-enabled products, modernise platforms and extend engineering teams for startups and scale-ups worldwide.",
   email: "info@alfa-point.com",
   careersEmail: "office@alfa-point.com",
-  phone: "+41 22 568 01 59",
+  phones: ["+373 (69) 719 888", "+373 (69) 905 471"],
   calendlyUrl: "https://calendly.com/d-lipceanu/30min",
 } as const;
+
+/** Tap-to-call link: keeps only the leading + and digits. */
+export function phoneHref(phone: string): string {
+  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+}
 
 export type Location = {
   country: string;
