@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { RevealObserver } from "@/components/ui/reveal-observer";
 import { BookingDialog } from "@/components/booking/booking-dialog";
 import { site } from "@/content/site";
+import { OG_IMAGE } from "@/content/metadata";
 import "./globals.css";
 
 const sans = Schibsted_Grotesk({ variable: "--font-schibsted", subsets: ["latin"] });
@@ -29,7 +30,21 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name}: ${site.tagline}`,
     description: site.description,
+    images: [OG_IMAGE],
   },
+  // Inherited by every page; the twitter image falls back to the OG image
+  twitter: { card: "summary_large_image" },
+};
+
+// Only established facts: no postal addresses until confirmed
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/icon.png`,
+  email: site.email,
+  description: site.description,
 };
 
 export const viewport: Viewport = {
@@ -49,6 +64,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c") }}
+        />
       </head>
       <body className="flex min-h-dvh flex-col overflow-x-clip">
         <a
