@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getRelatedServices, getService, services } from "../services";
 import { getJob, jobs } from "../jobs";
 import { legacyRedirects, legacyRewrites } from "../routing";
-import { companyStats, FOUNDED_YEAR, mainNav, yearsOnMarket } from "../site";
+import { companyStats, FOUNDED_YEAR, mainNav, phoneHref, site, yearsOnMarket } from "../site";
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -97,5 +97,16 @@ describe("site stats", () => {
   it("computes years on market from the founding year", () => {
     expect(yearsOnMarket(new Date("2026-06-01"))).toBe(2026 - FOUNDED_YEAR);
     expect(companyStats(new Date("2030-01-01"))[1].value).toBe(String(2030 - FOUNDED_YEAR));
+  });
+});
+
+describe("phone numbers", () => {
+  it("lists both Moldovan numbers in display format", () => {
+    expect(site.phones).toEqual(["+373 (69) 719 888", "+373 (69) 905 471"]);
+  });
+
+  it("builds tap-to-call links with digits only", () => {
+    expect(phoneHref("+373 (69) 719 888")).toBe("tel:+37369719888");
+    expect(phoneHref("+373 (69) 905 471")).toBe("tel:+37369905471");
   });
 });

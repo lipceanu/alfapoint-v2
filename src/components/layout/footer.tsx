@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { locations, mainNav, site } from "@/content/site";
+import { locations, mainNav, phoneHref, site } from "@/content/site";
 import { services } from "@/content/services";
 import { Container } from "@/components/ui/primitives";
 
@@ -16,9 +16,11 @@ export function Footer() {
               <a href={`mailto:${site.email}`} className="w-fit text-paper hover:text-lime">
                 {site.email}
               </a>
-              <a href={`tel:${site.phone.replace(/\s/g, "")}`} className="w-fit text-paper hover:text-lime">
-                {site.phone}
-              </a>
+              {site.phones.map((phone) => (
+                <a key={phone} href={phoneHref(phone)} className="w-fit text-paper hover:text-lime">
+                  {phone}
+                </a>
+              ))}
             </div>
           </div>
 

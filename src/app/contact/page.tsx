@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/content/metadata";
-import { locations, site } from "@/content/site";
+import { locations, phoneHref, site } from "@/content/site";
 import { BOOKING_ATTR } from "@/content/booking";
 import { PageHero } from "@/components/sections/page-hero";
 import { Icon } from "@/components/ui/icon";
@@ -17,7 +17,6 @@ const CHANNELS = [
     booking: true,
   },
   { label: "Email", value: site.email, href: `mailto:${site.email}`, primary: false, booking: false },
-  { label: "Phone", value: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}`, primary: false, booking: false },
   { label: "Careers", value: site.careersEmail, href: `mailto:${site.careersEmail}`, primary: false, booking: false },
 ] as const;
 
@@ -36,31 +35,12 @@ export default function ContactPage() {
       <section className="pb-24 sm:pb-32">
         <Container>
           <ul className="grid gap-4 md:grid-cols-2">
-            {CHANNELS.map((c, i) => (
-              <li key={c.label} data-reveal style={revealDelay(i * 80)}>
-                <a
-                  href={c.href}
-                  {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  {...(c.booking ? { [BOOKING_ATTR]: "", "aria-haspopup": "dialog" as const } : {})}
-                  className={`group flex h-full items-end justify-between gap-6 rounded-3xl p-8 transition-colors ${
-                    c.primary
-                      ? "bg-lime text-ink-950 hover:bg-white"
-                      : "border border-white/10 hover:border-lime/50"
-                  }`}
-                >
-                  <span>
-                    <span className={`eyebrow block ${c.primary ? "text-ink-950/70" : "text-mist"}`}>{c.label}</span>
-                    <span className="mt-8 block text-2xl font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-3xl">
-                      {c.value}
-                    </span>
-                  </span>
-                  <Icon
-                    name={c.href.startsWith("http") && !c.booking ? "arrowUpRight" : "arrow"}
-                    size={28}
-                    className="shrink-0 transition-transform group-hover:translate-x-1"
-                  />
-                </a>
-              </li>
+            {CHANNELS.slice(0, 2).map((c, i) => (
+              <ChannelCard key={c.label} channel={c} delay={i * 80} />
+            ))}
+            <PhoneCard delay={2 * 80} />
+            {CHANNELS.slice(2).map((c, i) => (
+              <ChannelCard key={c.label} channel={c} delay={(i + 3) * 80} />
             ))}
           </ul>
           <ul className="mt-16 grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
@@ -75,5 +55,56 @@ export default function ContactPage() {
         </Container>
       </section>
     </>
+  );
+}
+
+type Channel = (typeof CHANNELS)[number];
+
+function ChannelCard({ channel: c, delay }: { channel: Channel; delay: number }) {
+  return (
+    <li data-reveal style={revealDelay(delay)}>
+      <a
+        href={c.href}
+        {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...(c.booking ? { [BOOKING_ATTR]: "", "aria-haspopup": "dialog" as const } : {})}
+        className={`group flex h-full items-end justify-between gap-6 rounded-3xl p-8 transition-colors ${
+          c.primary ? "bg-lime text-ink-950 hover:bg-white" : "border border-white/10 hover:border-lime/50"
+        }`}
+      >
+        <span>
+          <span className={`eyebrow block ${c.primary ? "text-ink-950/70" : "text-mist"}`}>{c.label}</span>
+          <span className="mt-8 block text-2xl font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-3xl">
+            {c.value}
+          </span>
+        </span>
+        <Icon
+          name={c.href.startsWith("http") && !c.booking ? "arrowUpRight" : "arrow"}
+          size={28}
+          className="shrink-0 transition-transform group-hover:translate-x-1"
+        />
+      </a>
+    </li>
+  );
+}
+
+/** Two numbers can't share one link, so each gets its own tap-to-call row. */
+function PhoneCard({ delay }: { delay: number }) {
+  return (
+    <li data-reveal style={revealDelay(delay)} className="flex h-full flex-col rounded-3xl border border-white/10 p-6 sm:p-8">
+      <span className="eyebrow block text-mist">Phone</span>
+      <span className="mt-auto grid gap-3 pt-8">
+        {site.phones.map((phone) => (
+          <a
+            key={phone}
+            href={phoneHref(phone)}
+            className="group flex items-center justify-between gap-3 text-xl font-semibold tracking-tight transition-colors hover:text-lime xs:text-2xl sm:gap-6 sm:text-3xl"
+          >
+            {/* Narrow phones may wrap between digit groups; wider screens keep one line */}
+            <span>{phone}</span>
+            <Icon name="arrow" size={24} className="shrink-0 transition-transform group-hover:translate-x-1 sm:size-7" />
+          </a>
+        ))}
+      </span>
+    </li>
   );
 }

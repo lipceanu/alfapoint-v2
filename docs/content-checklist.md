@@ -19,7 +19,7 @@ The items below are claims or placeholders that someone at Alfapoint must confir
 
 ## Contact details
 - [ ] v2 used both `info@alfa-point.com` (general) and `office@alfa-point.com` (careers). Kept as-is; confirm both inboxes are monitored.
-- [ ] The phone number is a Swiss number (+41). Confirm it's still correct.
+- [x] Phone numbers updated to +373 (69) 719 888 and +373 (69) 905 471 (per the owner, 2026-10).
 - [ ] The Calendly link `calendly.com/d-lipceanu/30min` is personal. Consider a shared team link.
 
 ## Recommended additions (not built; they need real material)
