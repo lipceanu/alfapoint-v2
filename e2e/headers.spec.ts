@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { waitForAppReady } from "./helpers";
 
 // Plan PR 4. Header checks are browser-independent: run once.
 test.describe("response headers", () => {
@@ -39,7 +40,7 @@ test.describe("response headers", () => {
   test("the booking pop-up still embeds Calendly with these headers", async ({ page }) => {
     await page.route("https://calendly.com/**", (r) => r.fulfill({ contentType: "text/html", body: "<h1 id=cal>Calendly</h1>" }));
     await page.goto("/");
-    await page.locator("html[data-reveal-ready]").waitFor({ state: "attached" });
+    await waitForAppReady(page);
     await page.evaluate(() => (document.querySelector("main a[data-booking]") as HTMLElement).click());
     await expect(page.frameLocator("dialog iframe").locator("#cal")).toBeVisible();
   });
