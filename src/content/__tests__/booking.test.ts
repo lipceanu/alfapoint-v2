@@ -12,6 +12,11 @@ describe("calendlyEmbedUrl", () => {
     expect(url.searchParams.get("embed_type")).toBe("PopupWidget");
   });
 
+  it("does not suppress Calendly's own cookie banner (GDPR: its cookies still load)", () => {
+    const url = new URL(calendlyEmbedUrl(site.calendlyUrl, "www.alfa-point.com"));
+    expect(url.searchParams.has("hide_gdpr_banner")).toBe(false);
+  });
+
   it("keeps existing query parameters", () => {
     const url = new URL(calendlyEmbedUrl("https://calendly.com/team/intro?month=2026-10", "x.com"));
     expect(url.searchParams.get("month")).toBe("2026-10");
