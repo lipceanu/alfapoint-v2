@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/content/metadata";
 import { FOUNDED_YEAR, companyStats } from "@/content/site";
 import { PageHero } from "@/components/sections/page-hero";
+import { CountUp } from "@/components/motion/count-up";
 import { Principles } from "@/components/sections/engagement";
 import { Leadership, Locations } from "@/components/sections/leadership";
 import { CtaBand } from "@/components/sections/cta-band";
@@ -44,7 +45,7 @@ export default function AboutPage() {
             {stats.map((stat, i) => (
               <div key={stat.label} className="bg-paper p-6" data-reveal style={revealDelay(i * 80)}>
                 <dd className="text-4xl font-semibold tracking-tight">
-                  {stat.value}
+                  <CountUp value={stat.value} />
                   <span className="text-brand">.</span>
                 </dd>
                 <dt className="mt-2 text-sm text-slate">{stat.label}</dt>

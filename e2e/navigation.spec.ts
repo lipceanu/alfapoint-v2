@@ -34,6 +34,8 @@ test("mobile menu opens, locks scroll, closes with Escape and on navigation", as
   await expect(menu).toBeHidden();
   // Client-side navigation has no "load" event: wait for the new page itself to render
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Scale your engineering team");
+  // Right after a deploy Next.js may finish with a full reload of the same page: let it complete
+  await page.waitForLoadState("load");
 
   // Same-page anchor link must also close the menu
   await page.goto("/");

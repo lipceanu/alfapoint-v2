@@ -28,7 +28,8 @@ test.describe("homepage first screen at every width × height", () => {
           Promise.all(
             document
               .getAnimations()
-              .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+              // Time-based only: scroll-driven animations follow the scroll position and never "finish"
+              .filter((a) => a.timeline === document.timeline && a.effect?.getComputedTiming().iterations !== Infinity)
               .map((a) => a.finished.catch(() => undefined)),
           ),
         );

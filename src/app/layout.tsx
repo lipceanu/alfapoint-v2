@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { RevealObserver } from "@/components/ui/reveal-observer";
 import { BookingDialog } from "@/components/booking/booking-dialog";
+import { SpotlightTracker } from "@/components/motion/spotlight-tracker";
 import { site } from "@/content/site";
 import { OG_IMAGE } from "@/content/metadata";
 import "./globals.css";
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer />
         <RevealObserver />
         <BookingDialog />
+        <SpotlightTracker />
         <Analytics />
       </body>
     </html>
