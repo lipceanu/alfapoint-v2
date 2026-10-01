@@ -35,7 +35,9 @@ test.describe("mobile menu", () => {
     await page.goto("/");
     await waitForAppReady(page);
     const toggle = page.getByRole("button", { name: "Open menu" });
-    await toggle.click();
+    // Open with the keyboard: only keyboard users get focus moved into the menu
+    await toggle.focus();
+    await page.keyboard.press("Enter");
     const menu = page.locator("#mobile-menu");
     await expect(menu).toBeVisible();
 

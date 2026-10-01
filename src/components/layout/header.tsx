@@ -16,6 +16,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  // Focus moves into the menu only for keyboard users: touch browsers (iOS Safari)
+  // draw a focus ring for any programmatic focus, which looks broken after a tap
+  const openedByKeyboard = useRef(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -40,7 +43,7 @@ export function Header() {
     // Everything outside the header is inert while the full-screen menu is open
     const background = document.querySelectorAll<HTMLElement>('#main, body > footer, a[href="#main"]');
     background.forEach((el) => (el.inert = true));
-    menuRef.current?.querySelector<HTMLElement>("a")?.focus();
+    if (openedByKeyboard.current) menuRef.current?.querySelector<HTMLElement>("a")?.focus();
 
     const focusables = () => [
       toggleRef.current!,
@@ -74,7 +77,11 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300 ${
-        scrolled || open ? "border-b border-white/10 bg-ink-950/85 backdrop-blur-xl" : "border-b border-transparent"
+        open
+          ? "border-b border-white/10 bg-ink-950"
+          : scrolled
+            ? "border-b border-white/10 bg-ink-950/95 backdrop-blur-xl"
+            : "border-b border-transparent"
       }`}
     >
       <div className="mx-auto flex h-18 max-w-[1240px] items-center justify-between px-5 sm:px-8">
@@ -111,7 +118,9 @@ export function Header() {
             aria-expanded={open}
             aria-controls={open ? "mobile-menu" : undefined}
             aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => {
+            onClick={(e) => {
+              // detail === 0: activated with Enter/Space rather than a pointer
+              openedByKeyboard.current = e.detail === 0;
               setOpen(!open);
               if (open) toggleRef.current?.focus();
             }}
