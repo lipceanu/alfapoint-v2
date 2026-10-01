@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { waitForAppReady } from "./helpers";
+import { scrollThrough, waitForAppReady } from "./helpers";
 
 // Interaction regressions found in the Codex-reviewed plan (docs/improvement-plan.md, PR 2).
 // Runs once per engine: desktop Chrome, Firefox and Safari (viewport is set per test).
@@ -194,6 +194,10 @@ test.describe("focus indicator", () => {
     for (const path of ["/", "/services/ai-solutions", "/contact"]) {
       await page.goto(path);
       await waitForAppReady(page);
+      // Let every fade-in finish first: a card still sliding into place can briefly overhang its container
+      await scrollThrough(page);
+      await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+      await page.waitForTimeout(900);
       for (let i = 0; i < 60; i++) {
         await page.keyboard.press("Tab");
         const r = await page.evaluate(() => {

@@ -30,6 +30,7 @@ export function ServicesGrid({ showHeader = true }: { showHeader?: boolean }) {
             >
               <Link
                 href={`/services/${service.slug}`}
+                data-spotlight
                 className="focus-inset group relative flex h-full min-h-[280px] flex-col bg-paper p-8 transition-colors duration-500 hover:bg-ink-900 hover:text-paper"
               >
                 <div className="flex items-start justify-between">

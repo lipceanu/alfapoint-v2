@@ -1,3 +1,4 @@
+import type React from "react";
 import { engagementModels, principles, processSteps } from "@/content/company";
 import { Accent, Container, SectionHeader, revealDelay } from "@/components/ui/primitives";
 
@@ -19,6 +20,7 @@ export function EngagementModels() {
           {engagementModels.map((model, i) => (
             <li
               key={model.name}
+              data-spotlight
               className="group relative flex flex-col rounded-3xl border border-white/10 bg-ink-800/50 p-7 transition-colors duration-500 hover:border-lime/50"
               data-reveal
               style={revealDelay(i * 90)}
@@ -72,7 +74,7 @@ export function Principles() {
 export function ProcessTimeline({ tone = "light" }: { tone?: "light" | "dark" }) {
   const light = tone === "light";
   return (
-    <section className={`${light ? "bg-paper text-ink-900" : ""} relative overflow-hidden py-24 sm:py-32`}>
+    <section className={`${light ? "bg-paper text-ink-900" : ""} timeline-scope relative overflow-clip py-24 sm:py-32`}>
       <div className={`${light ? "bg-blueprint-light" : "bg-blueprint"} absolute inset-0`} aria-hidden="true" />
       <Container className="relative">
         <SectionHeader
@@ -84,18 +86,26 @@ export function ProcessTimeline({ tone = "light" }: { tone?: "light" | "dark" })
             </>
           }
         />
-        <ol className="mt-16 grid gap-10 md:grid-cols-5 md:gap-6">
+        {/* As the list scrolls through the screen, connectors fill and numbers light up, step by step */}
+        <ol className="timeline mt-16 grid gap-10 md:grid-cols-5 md:gap-6">
           {processSteps.map((step, i) => (
-            <li key={step.title} className="relative" data-reveal style={revealDelay(i * 90)}>
+            <li
+              key={step.title}
+              className="relative"
+              data-reveal
+              style={{ ...revealDelay(i * 90), "--i": i } as React.CSSProperties}
+            >
               <div className="flex items-center gap-3">
                 <span
-                  className={`grid h-10 w-10 shrink-0 place-items-center rounded-full font-mono text-sm ${
+                  className={`timeline-dot grid h-10 w-10 shrink-0 place-items-center rounded-full font-mono text-sm ${
                     light ? "bg-ink-900 text-lime" : "bg-lime text-ink-950"
                   }`}
                 >
                   {i + 1}
                 </span>
-                <span className={`hidden h-px flex-1 md:block ${light ? "bg-ink-900/15" : "bg-white/15"}`} />
+                <span className={`relative hidden h-px flex-1 md:block ${light ? "bg-ink-900/15" : "bg-white/15"}`}>
+                  <span className="timeline-fill absolute inset-0 hidden origin-left bg-brand" aria-hidden="true" />
+                </span>
               </div>
               <h3 className="mt-5 text-lg font-semibold">{step.title}</h3>
               <p className={`mt-2 text-sm leading-relaxed ${light ? "text-slate" : "text-mist"}`}>{step.body}</p>

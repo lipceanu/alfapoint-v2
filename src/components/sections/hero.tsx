@@ -78,7 +78,13 @@ function TeamPanel() {
     >
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <p className="eyebrow text-mist">team.assemble()</p>
-        <span className="rounded-full bg-lime/10 px-3 py-1 font-mono text-[11px] text-lime">day 7 of 10</span>
+        <span className="rounded-full bg-lime/10 px-3 py-1 font-mono text-[11px] text-lime">
+          <span className="sr-only">day 7 of 10</span>
+          {/* Counts 1 → 7 once (CSS counter on an animated integer); text fallback is the final 7 */}
+          <span aria-hidden="true">
+            day <span className="assemble-day" /> of 10
+          </span>
+        </span>
       </div>
       <ul className="mt-2 divide-y divide-white/5">
         {TEAM_ROLES.map((member, i) => (
@@ -96,19 +102,25 @@ function TeamPanel() {
                 <p className="font-mono text-xs text-mist">{member.stack}</p>
               </div>
             </div>
-            <span
-              className={`flex items-center gap-1.5 text-xs ${
-                member.status === "Matched" ? "text-lime" : "text-mist"
-              }`}
-            >
-              {member.status === "Matched" && <Icon name="check" size={14} strokeWidth={2.2} />}
-              {member.status}
+            {/* "Searching…" and the final status share one grid cell, so swapping them never shifts layout */}
+            <span className="grid justify-items-end text-xs" style={{ "--at": `${1300 + i * 550}ms` } as React.CSSProperties}>
+              <span className="assemble-before col-start-1 row-start-1 text-mist" aria-hidden="true">
+                Searching…
+              </span>
+              <span
+                className={`assemble-after col-start-1 row-start-1 flex items-center gap-1.5 ${
+                  member.status === "Matched" ? "text-lime" : "text-mist"
+                }`}
+              >
+                {member.status === "Matched" && <Icon name="check" size={14} strokeWidth={2.2} />}
+                {member.status}
+              </span>
             </span>
           </li>
         ))}
       </ul>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/5">
-        <div className="h-full w-[70%] rounded-full bg-gradient-to-r from-brand to-lime" />
+        <div className="assemble-progress h-full w-[70%] origin-left rounded-full bg-gradient-to-r from-brand to-lime" />
       </div>
       <p className="mt-4 text-xs text-mist">
         Mid–senior engineers onboarded in up to 10 working days.
