@@ -24,6 +24,7 @@ type Booking = { href: string; id: number };
 export function BookingDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const titleRef = useRef<HTMLParagraphElement>(null);
   const nextId = useRef(0);
   // A fresh object (and id) per click, so every opening gets its own frame and timers
   const [booking, setBooking] = useState<Booking | null>(null);
@@ -55,6 +56,9 @@ export function BookingDialog() {
     const dialog = dialogRef.current;
     if (!dialog || !booking) return;
     if (!dialog.open) dialog.showModal();
+    // showModal() focuses the first button (close), which touch browsers outline.
+    // Focus the title instead: no ring, and Tab still reaches the close button next.
+    titleRef.current?.focus();
     // Lock page scroll behind the modal (html + body for iOS Safari)
     const root = document.documentElement;
     root.style.overflow = "hidden";
@@ -105,12 +109,13 @@ export function BookingDialog() {
       {link && (
         <div className="relative flex h-full flex-col bg-white text-ink-900 windowed:rounded-3xl">
           <div className="flex items-center justify-between gap-4 border-b border-ink-900/10 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] [@media(max-height:500px)]:py-1 pr-[max(1.25rem,env(safe-area-inset-right))] pl-[max(1.25rem,env(safe-area-inset-left))]">
-            <p className="font-semibold">Book a 30-minute call</p>
+            <p ref={titleRef} tabIndex={-1} className="font-semibold outline-none focus-visible:[box-shadow:none] focus-visible:outline-none">
+              Book a 30-minute call
+            </p>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={close}
-                autoFocus
                 aria-label="Close booking"
                 className="grid h-11 w-11 place-items-center rounded-full bg-ink-900/5 transition-colors hover:bg-ink-900/10"
               >
