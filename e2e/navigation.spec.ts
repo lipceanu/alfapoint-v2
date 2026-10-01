@@ -32,7 +32,8 @@ test("mobile menu opens, locks scroll, closes with Escape and on navigation", as
   await menu.getByRole("link", { name: "Dedicated Teams" }).click();
   await expect(page).toHaveURL(/\/services\/dedicated-teams$/);
   await expect(menu).toBeHidden();
-  await page.waitForLoadState("load"); // let the navigation finish before starting another
+  // Client-side navigation has no "load" event: wait for the new page itself to render
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Scale your engineering team");
 
   // Same-page anchor link must also close the menu
   await page.goto("/");
